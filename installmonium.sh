@@ -38,7 +38,7 @@ display_checklist() {
     if $UPDATE_COMPLETED; then
         echo -e "${GREEN}[✔] ${BOLD}System update${NC}${GREEN} completed.${NC}"
     else
-        echo -e "${RED}[✘] ${BOLD}System update{NC}${RED} pending...${NC}"
+        echo -e "${RED}[✘] ${BOLD}System update${NC}${RED} pending...${NC}"
     fi
 
     if $UPGRADE_COMPLETED; then
