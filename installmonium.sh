@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Script : Installnation 
+#Script : Installmonium 
 #Author: David "Davalo" Ramirez 
 # Date 8/12/2024 
 
