@@ -1,5 +1,5 @@
 # NUC-Updating
-This is a Repo for Updating Kali Images, and installting the next packages 
+This is a Repo for Updating Kali Images, and installing packages for Pentesting
 
 - Netexec 
 - Golang
