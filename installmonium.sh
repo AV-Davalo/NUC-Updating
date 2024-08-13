@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#Script : Installmonium 
+#Script : Installnation 
 #Author: David "Davalo" Ramirez 
-# Date 8/12/2024 
+# Date 8/13/2024 
 
 
 #Color Codes
@@ -15,6 +15,12 @@ CYAN='\033[0;36m'
 BOLD='\033[1m'
 WHITE='\033[0;37m'
 NC='\033[0m' # No Color
+PURPLE='\033[0;35m'
+ORANGE='\033[0;33m'
+LIGHT_MAGENTA='\033[1;35m'
+LIGHT_GREEN='\033[1;32m'
+LIGHT_YELLOW='\033[1;33m'
+
 
 #Variables to check installed Packages
 UPDATE_COMPLETED=false
@@ -24,6 +30,10 @@ Golang_Installed=false
 Ldapnomnom_Installed=false
 mitm6_Installed=false
 seclists_Installed=false
+Kerbrute_Installed=false
+credmaster_Installed=false
+nessus_Installed=false 
+
 
 #Function of checking
 is_installed() {
@@ -34,7 +44,7 @@ is_installed() {
 display_checklist() {
     clear
     # Update and Upgrade status 
-    echo -e "${GREEN}Update and Upgrade status:... ${NC}"
+    echo -e "${GREEN}Update and Upgrade status:...${NC}"
     if $UPDATE_COMPLETED; then
         echo -e "${GREEN}[✔] ${BOLD}System update${NC}${GREEN} completed.${NC}"
     else
@@ -54,7 +64,6 @@ display_checklist() {
     else
         echo -e "${RED}[✘]  ${BOLD}${YELLOW}netexec${NC}${RED} installation pending...${NC}"
     fi
-
         if $Golang_Installed; then
         echo -e "${GREEN}[✔]  ${BOLD}${MAGENTA}Golang${NC}${GREEN} installed successfully.${NC}"
     else
@@ -70,10 +79,25 @@ display_checklist() {
     else
         echo -e "${RED}[✘]  ${BOLD}${YELLOW}Seclists${NC}${RED} installation pending...${NC}"
     fi
-          if $Ldapnomnom_Installed; then
+        if $Ldapnomnom_Installed; then
         echo -e "${GREEN}[✔]  ${BOLD}${WHITE}ldapnomnom${NC}${GREEN} installed successfully.${NC}"
     else
         echo -e "${RED}[✘]  ${BOLD}${YELLOW}ldapnomnom${NC}${RED} installation pending...${NC}"
+    fi
+        if $Kerbrute_Installed; then
+        echo -e "${GREEN}[✔]  ${BOLD}${ORANGE}Kerbrute${NC}${GREEN} installed successfully.${NC}"
+    else
+        echo -e "${RED}[✘]  ${BOLD}${YELLOW}Kerbrute${NC}${RED} installation pending...${NC}"
+    fi
+        if $credmaster_Installed; then
+        echo -e "${GREEN}[✔]  ${BOLD}${LIGHT_MAGENTA}Credmaster${NC}${GREEN} installed successfully in ${BOLD}${LIGHT_MAGENTA}/usr/share/credmaster.${NC}"
+    else
+        echo -e "${RED}[✘]  ${BOLD}${YELLOW}Credmaster${NC}${RED} installation pending...${NC}"
+    fi
+        if $nessus_Installed; then
+        echo -e "${GREEN}[✔]  ${BOLD}${PURPLE}Nessus${NC}${GREEN} installed successfully.${NC}"
+    else
+        echo -e "${RED}[✘]  ${BOLD}${YELLOW}Nessus${NC}${RED} installation pending...${NC}"
     fi
 }
 
@@ -149,7 +173,7 @@ else
     display_checklist
 fi
 
-#Installation Ldapnomnom
+#Ldapnomnom Installation 
 
 if command -v ldapnomnom-linux-x64 &> /dev/null; then
     Ldapnomnom_Installed=true
@@ -168,6 +192,65 @@ else
     display_checklist
 fi
 
+# Installing Kerbrute
+
+if command -v kerbrute_linux_amd64 &> /dev/null; then
+    Kerbrute_Installed=true
+    display_checklist
+    echo -e "${GREEN}Kerbrute is already installed. Skipping...${NC}"
+else
+    echo -e "${GREEN}Installing Kerbrute...${NC}"
+    cd /usr/share && sudo mkdir Kerbrute && cd Kerbrute && \
+    sudo wget https://github.com/ropnop/kerbrute/releases/download/v1.0.3/kerbrute_linux_amd64 && \
+    sudo chmod +x kerbrute_linux_amd64 && \
+    sudo mv kerbrute_linux_amd64 /usr/local/bin/
+    
+    if command -v kerbrute_linux_amd64 &> /dev/null; then
+        Kerbrute_Installed=true
+    fi
+    display_checklist
+fi
+
+
+
+# Installing Credmaster 
+
+if command -v credmaster &> /dev/null; then
+    credmaster_Installed=true
+    display_checklist
+    echo -e "${GREEN}Credmaster is already installed. Skipping...${NC}"
+else
+    cd /usr/share && \
+    git clone https://github.com/knavesec/CredMaster && \
+    cd CredMaster && \
+    pip3 install -r requirements.txt && \
+    credmaster_Installed=true
+    display_checklist
+fi
+
+
+
+# Nessus Installation and Setup 
+
+if systemctl is-active --quiet nessusd; then
+    nessus_Installed=true
+    display_checklist
+    echo -e "${GREEN}Nessus is already installed and running. Skipping...${NC}"
+else
+    echo -e "${GREEN}Installing Nessus...${NC}"
+    cd /tmp && \
+    curl --request GET \
+  --url 'https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.8.1-ubuntu1604_amd64.deb' \
+  --output 'Nessus-10.8.1-ubuntu1604_amd64.deb'
+    sudo dpkg -i Nessus-10.8.1-ubuntu1604_amd64.deb && \
+    sudo systemctl start nessusd && \
+    sudo systemctl enable nessusd
+    
+    if systemctl is-active --quiet nessusd; then
+        nessus_Installed=true
+    fi
+    display_checklist
+fi
 
 # Clean up
 echo -e "${GREEN}Cleaning up...${NC}"
