@@ -149,6 +149,8 @@ else
     display_checklist
 fi
 
+#Installation Ldapnomnom
+
 if command -v ldapnomnom-linux-x64 &> /dev/null; then
     Ldapnomnom_Installed=true
     display_checklist
