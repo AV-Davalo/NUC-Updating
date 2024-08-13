@@ -149,18 +149,6 @@ else
     display_checklist
 fi
 
-
-# Install ldapnomnom
-#echo -e "${RED}Installing ldapnomnom... This can take a while${NC}"
-# sudo go install github.com/lkarlslund/ldapnomnom@latest
-
-#cd /usr/share
-#sudo mkdir ldapnomnom
-#cd ldapnomnom
-#sudo wget https://github.com/lkarlslund/ldapnomnom/releases/download/v1.3.0/ldapnomnom-linux-x64
-#sudo chmod +x ldapnomnom-linux-arm64
-#sudo mv ldapnomnom-linux-arm64 /usr/local/bin/
-
 if command -v ldapnomnom-linux-x64 &> /dev/null; then
     Ldapnomnom_Installed=true
     display_checklist
