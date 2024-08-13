@@ -2,7 +2,7 @@
 
 #Script : Installnation 
 #Author: David "Davalo" Ramirez 
-# Date 8/13/2024 
+# Date 8/12/2024 
 
 
 #Color Codes
@@ -20,7 +20,7 @@ ORANGE='\033[0;33m'
 LIGHT_MAGENTA='\033[1;35m'
 LIGHT_GREEN='\033[1;32m'
 LIGHT_YELLOW='\033[1;33m'
-
+LIGHT_RED='\033[1;31m'
 
 #Variables to check installed Packages
 UPDATE_COMPLETED=false
@@ -33,7 +33,7 @@ seclists_Installed=false
 Kerbrute_Installed=false
 credmaster_Installed=false
 nessus_Installed=false 
-
+bloodhound_Installed=false
 
 #Function of checking
 is_installed() {
@@ -93,6 +93,11 @@ display_checklist() {
         echo -e "${GREEN}[✔]  ${BOLD}${LIGHT_MAGENTA}Credmaster${NC}${GREEN} installed successfully in ${BOLD}${LIGHT_MAGENTA}/usr/share/credmaster.${NC}"
     else
         echo -e "${RED}[✘]  ${BOLD}${YELLOW}Credmaster${NC}${RED} installation pending...${NC}"
+    fi
+            if $bloodhound_Installed; then
+        echo -e "${GREEN}[✔]  ${BOLD}${LIGHT_RED}Bloodhound-Python${NC}${GREEN} installed successfully.${NC}"
+    else
+        echo -e "${RED}[✘]  ${BOLD}${YELLOW}Bloodhound-Python${NC}${RED} installation pending...${NC}"
     fi
         if $nessus_Installed; then
         echo -e "${GREEN}[✔]  ${BOLD}${PURPLE}Nessus${NC}${GREEN} installed successfully.${NC}"
@@ -215,7 +220,7 @@ fi
 
 # Installing Credmaster 
 
-if command -v credmaster &> /dev/null; then
+if  [ -d "/usr/share/CredMaster" ]; then
     credmaster_Installed=true
     display_checklist
     echo -e "${GREEN}Credmaster is already installed. Skipping...${NC}"
@@ -228,6 +233,17 @@ else
     display_checklist
 fi
 
+#Bloodhound-Python 
+
+if command -v bloodhound-python &> /dev/null; then
+    bloodhound_Installed=true
+    display_checklist
+    echo -e "${GREEN}Bloodhound is already installed. Skipping...${NC}"
+else
+    pip install bloodhound
+    bloodhound_Installed=true
+    display_checklist
+fi
 
 
 # Nessus Installation and Setup 
