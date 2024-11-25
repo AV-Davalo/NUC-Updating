@@ -26,6 +26,8 @@ print_banner(){
     echo -e "${NC}"
 }
 
+print_banner
+
 # Constant for Releaseas only (this can be updated to add any realeases package)
 GOWITNESS_URL="https://github.com/sensepost/gowitness/releases/download/2.5.1/gowitness-2.5.1-linux-amd64"
 LDAPNOMNOM_URL="https://github.com/lkarlslund/ldapnomnom/releases/download/v1.3.0/ldapnomnom-linux-x64"
