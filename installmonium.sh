@@ -97,7 +97,7 @@ is_installed() {
 
 # Update && upgrade -y 
 echo -e "${YELLOW}Updating and upgrading the system...${NC}"
-sudo apt update && sudo apt upgrade -y
+sudo apt update && sudo apt DEBIAN_FRONTEND=noninteractive upgrade -y
 
 #Iteration for installation
 for tool in "${!tools[@]}"; do
